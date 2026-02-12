@@ -1,5 +1,4 @@
 from __future__ import annotations
-
 import json
 import os
 import re
@@ -13,6 +12,8 @@ from app.llm import build_langchain_tools, build_llm_messages, get_llm, parse_to
 from app.logging_utils import log_event
 from app.tools import TOOLS, get_tool
 from app.store import ConversationState, PendingTool
+from evaluation.evaluation_llm import evaluate_chat_completion
+
 
 
 APPROVAL_YES = {"yes", "y", "approve", "approved", "go ahead", "ok", "okay", "do it"}

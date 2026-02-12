@@ -1,24 +1,60 @@
 # test_eval.py
-import os
-import sys
-sys.path.append(os.path.dirname(os.path.abspath(__file__)))
-from evaluation.runner import run_evaluation
 
-# Dummy model function to simulate tool selection and execution
-def dummy_model(input_text: str):
-    """
-    Simulates a model predicting a tool, its parameters, and output.
-    """
-    input_text_lower = input_text.lower()
-    if "calculate" in input_text_lower:
-        return "calculator", {"expression": "5+3"}, 8
-    elif "weather" in input_text_lower:
-        return "weather_api", {"location": "Paris"}, {"temperature": "20C"}
-    else:
-        return "unknown_tool", {}, None
+# from evaluation.runner import run_dynamic_evaluation
+# from evaluation.dataset import DYNAMIC_TEST_CONVERSATIONS
 
-if __name__ == "__main__":
-    results = run_evaluation(dummy_model)
-    print("Evaluation Results:")
-    for i, res in enumerate(results, start=1):
-        print(f"Example {i}: {res}")
+# def main():
+#     for idx, conv_messages in enumerate(DYNAMIC_TEST_CONVERSATIONS):
+#         result = run_dynamic_evaluation(conv_messages)
+#         print(f"Conversation {idx+1} metrics:")
+#         print("Step metrics:", result["step_metrics"])
+#         print("Aggregate metrics:", result["aggregate_metrics"])
+#         print("-"*60)
+
+# if __name__ == "__main__":
+#     main()
+
+# from evaluation.evaluation_llm import evaluate_conversation_llm
+# # Example dataset
+# dataset = [
+#     {
+#         "session_id": "xyz123",
+#         "user": "Create an appointment for tomorrow at 3pm",
+#         "tool_name": "appointment_book",
+#         "tool_parameters": {"start_time": "2026-02-13T15:00:00"},
+#         "tool_result": {"appointment_id": "apt_abc", "status": "confirmed"}
+#     },
+#     # ... more steps
+# ]
+
+# results = evaluate_conversation_llm(dataset)
+
+# for r in results:
+#     print(r)
+
+import uuid
+from evaluation.evaluation_llm  import evaluate_conversation_llm
+
+conversation = [
+    {
+
+        "session_id": str(uuid.uuid4()),
+        "user": "Create appointment with Dr. Smith tomorrow 3pm",
+        "tool_name": "create_appointment",
+        "tool_parameters": {"doctor": "Dr. Smith", "time": "tomorrow 3pm"},
+        "tool_result": {"status": "success", "appointment_id": "abc123"}
+    },
+    {
+        "session_id": str(uuid.uuid4()),
+        "user": "Change it to 4pm",
+        "tool_name": "update_appointment",
+        "tool_parameters": {"appointment_id": "abc123", "new_time": "4pm"},
+        "tool_result": {"status": "success"}
+    },
+]
+
+results = evaluate_conversation_llm(conversation)
+
+for r in results:
+    print(r)
+

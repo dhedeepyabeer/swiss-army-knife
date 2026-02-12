@@ -23,7 +23,7 @@ class ToolDecision(BaseModel):
     missing_parameters: List[str] = Field(default_factory=list)
     collected_parameters: Dict[str, Any] = Field(default_factory=dict)
     action: str = "none"  # none|need_parameters|need_approval|executed|no_tool
-
+    evaluation: Optional[Dict[str, Any]] = None 
 
 class ChatResponse(BaseModel):
     id: str
@@ -32,3 +32,5 @@ class ChatResponse(BaseModel):
     choices: List[Dict[str, Any]]
     tool_decision: ToolDecision
     tools: List[Dict[str, Any]]
+
+
